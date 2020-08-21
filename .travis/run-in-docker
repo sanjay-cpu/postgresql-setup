@@ -1,8 +1,16 @@
 #! /bin/bash -x
 
+ARCH=`uname -m`
+
+if [ "$ARCH" = "ppc64le" ]; then
+container_id=$(
+    docker run -d -i -v `pwd`:/workdir:Z -u $(id -u) registry.fedoraproject.org/fedora bash
+)
+else
 container_id=$(
     docker run -d -ti -v `pwd`:/workdir:Z -u $(id -u) registry.fedoraproject.org/fedora bash
 )
+fi
 
 cleanup ()
 {
@@ -17,8 +25,12 @@ run_in_container ()
     if ${as_root-false}; then
         uid=0
     fi
-
+if [ "$ARCH" = "ppc64le" ]; then
+    docker exec -u $uid -i "$container_id" "$@"
+else
     docker exec -u $uid -ti "$container_id" "$@"
+fi
+
 }
 
 buildrequires='

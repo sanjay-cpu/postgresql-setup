@@ -2,6 +2,7 @@
 
 ARCH=`uname -m`
 
+#Putted condition for ppc64le and removed "-t" from the command to resolve the error like " the input device is not a tty"
 if [ "$ARCH" = "ppc64le" ]; then
 container_id=$(
     docker run -d -i -v `pwd`:/workdir:Z -u $(id -u) registry.fedoraproject.org/fedora bash
@@ -25,6 +26,8 @@ run_in_container ()
     if ${as_root-false}; then
         uid=0
     fi
+    
+ #Putted condition for ppc64le and removed "-t" from the command to resolve the error like " the input device is not a tty"
 if [ "$ARCH" = "ppc64le" ]; then
     docker exec -u $uid -i "$container_id" "$@"
 else

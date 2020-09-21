@@ -1,7 +1,7 @@
 #! /bin/bash -x
 
 container_id=$(
-    docker run -d -ti -v `pwd`:/workdir:Z -u $(id -u) registry.fedoraproject.org/fedora bash
+    docker run -d -i -v `pwd`:/workdir:Z -u $(id -u) registry.fedoraproject.org/fedora bash
 )
 
 cleanup ()
@@ -18,7 +18,7 @@ run_in_container ()
         uid=0
     fi
 
-    docker exec -u $uid -ti "$container_id" "$@"
+    docker exec -u $uid -i "$container_id" "$@"
 }
 
 buildrequires='
